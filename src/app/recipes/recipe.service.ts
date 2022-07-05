@@ -6,6 +6,7 @@ import { Recipe } from './recipe.model';
 @Injectable()
 export class RecipeService{
     recipeSelected = new EventEmitter<Recipe>();
+    recipesChanged = new EventEmitter<Recipe[]>();
     
     private recipes: Recipe[] = [
         new Recipe('Chicken Biryani', 'This is simply biryani', 'https://geekrobocook.com/wp-content/uploads/2021/05/Muradabadi-chicken-biryani-1200x900.jpg', [
@@ -30,5 +31,15 @@ export class RecipeService{
 
     addIngredientsToList(ingredients: Ingredient[]){
         this.slService.addIngredients(ingredients);
+    }
+
+    addRecipe(recipe: Recipe){
+        this.recipes.push(recipe);
+        this.recipesChanged.emit(this.recipes.slice());
+    }
+
+    updateRecipe(index: number, newRecipe: Recipe){
+        this.recipes[index] = newRecipe;
+        this.recipesChanged.emit(this.recipes.slice());
     }
 }
