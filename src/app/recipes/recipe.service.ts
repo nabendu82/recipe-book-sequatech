@@ -8,18 +8,25 @@ export class RecipeService{
     recipeSelected = new EventEmitter<Recipe>();
     recipesChanged = new EventEmitter<Recipe[]>();
     
-    private recipes: Recipe[] = [
-        new Recipe('Chicken Biryani', 'This is simply biryani', 'https://geekrobocook.com/wp-content/uploads/2021/05/Muradabadi-chicken-biryani-1200x900.jpg', [
-            new Ingredient('Chicken', 1),
-            new Ingredient('Rice', 20)
-        ]),
-        new Recipe('Chicken noodles', 'This is simply noodles', 'https://www.licious.in/blog/wp-content/uploads/2020/12/Sesame-Chicken-Noodles.jpg', [
-            new Ingredient('Chicken', 1),
-            new Ingredient('Noodles', 22)
-        ])
-    ]
+    // private recipes: Recipe[] = [
+    //     new Recipe('Chicken Biryani', 'This is simply biryani', 'https://geekrobocook.com/wp-content/uploads/2021/05/Muradabadi-chicken-biryani-1200x900.jpg', [
+    //         new Ingredient('Chicken', 1),
+    //         new Ingredient('Rice', 20)
+    //     ]),
+    //     new Recipe('Chicken noodles', 'This is simply noodles', 'https://www.licious.in/blog/wp-content/uploads/2020/12/Sesame-Chicken-Noodles.jpg', [
+    //         new Ingredient('Chicken', 1),
+    //         new Ingredient('Noodles', 22)
+    //     ])
+    // ]
+
+    private recipes: Recipe[];
 
     constructor(private slService: ShoppingListService){}
+
+    setRecipes(recipes: Recipe[]){
+        this.recipes = recipes;
+        this.recipesChanged.emit(this.recipes.slice());
+    }
 
     getRecipes(){
         return this.recipes.slice();
@@ -40,6 +47,11 @@ export class RecipeService{
 
     updateRecipe(index: number, newRecipe: Recipe){
         this.recipes[index] = newRecipe;
+        this.recipesChanged.emit(this.recipes.slice());
+    }
+
+    deleteRecipe(index: number){
+        this.recipes.splice(index, 1);
         this.recipesChanged.emit(this.recipes.slice());
     }
 }
